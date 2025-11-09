@@ -1,8 +1,8 @@
 from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .models import Habitacion, Reserva
-from .serializers import HabitacionDisponibleSerializer, ReservaSerializer
+from .models import Habitacion, Reserva, TipoHabitacion, Servicio
+from .serializers import HabitacionDisponibleSerializer, ReservaSerializer, TipoHabitacionSerializer, ServicioSerializer
 from django.db.models import Q
 from datetime import date
 from pagos.models import Transaccion 
@@ -10,16 +10,30 @@ from pagos.models import Transaccion
 
 
 def obtener_habitaciones_disponibles(fecha_in, fecha_out):
-    """Lógica para determinar qué habitaciones están libres en un rango de fechas."""
     reservas_conflictivas = Reserva.objects.filter(
         Q(fecha_checkin__lt=fecha_out) & Q(fecha_checkout__gt=fecha_in)
     ).values_list('habitacion_id', flat=True).distinct()
     
     habitaciones_disponibles = Habitacion.objects.filter(
         ~Q(id__in=reservas_conflictivas),
-        estado='LIBRE'
+        estado='LIBRE' 
     )
     return habitaciones_disponibles
+
+
+
+
+class TipoHabitacionReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
+    """API para obtener todos los tipos de habitación."""
+    queryset = TipoHabitacion.objects.all()
+    serializer_class = TipoHabitacionSerializer
+    permission_classes = [permissions.AllowAny]
+
+class ServicioReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
+    """API para obtener todos los servicios adicionales."""
+    queryset = Servicio.objects.all()
+    serializer_class = ServicioSerializer
+    permission_classes = [permissions.AllowAny]
 
 
 
@@ -28,7 +42,6 @@ class ReservaViewSet(viewsets.ModelViewSet):
     serializer_class = ReservaSerializer
     
     def get_permissions(self):
-        """Asigna permisos basados en la acción."""
         if self.action in ['list', 'retrieve', 'get_disponibilidad']:
             permission_classes = [permissions.AllowAny]
         else:

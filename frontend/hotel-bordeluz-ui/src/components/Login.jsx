@@ -28,11 +28,7 @@ const Login = ({ onSuccess, onSwitchToRegister }) => {
         username: username,
       };
 
-      setAuthToken(accessToken); 
-      localStorage.setItem('refresh_token', response.data.refresh);
-      localStorage.setItem('user_info', JSON.stringify(userInfo));
-
-      login(userInfo); 
+      login(userInfo, accessToken); 
       
       setLoading(false);
       
