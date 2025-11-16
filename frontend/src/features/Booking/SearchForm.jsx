@@ -51,7 +51,7 @@ const SearchForm = ({ onSearch, isLoading }) => {
     const checkInFormatted = new Date(checkIn).toISOString().split('T')[0];
     const checkOutFormatted = new Date(checkOut).toISOString().split('T')[0];
 
-    onSearch(checkInFormatted, checkOutFormatted);
+    onSearch(checkInFormatted, checkOutFormatted); 
   };
 
   return (

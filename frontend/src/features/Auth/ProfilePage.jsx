@@ -1,10 +1,7 @@
-// frontend/hotel-bordeluz-ui/src/components/ProfilePage.jsx (NUEVO ARCHIVO)
-
 import React, { useState, useEffect } from 'react';
-import api from '../services/api';
-import { useAuth } from '../context/AuthContext';
+import api from '../../services/api'; 
+import { useAuth } from '../../context/AuthContext'; 
 
-// Estilos (similares al Modal de Login)
 const style = {
     container: {
         maxWidth: '600px',
@@ -80,13 +77,11 @@ const ProfilePage = () => {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
 
-    // 1. Cargar datos del perfil al montar el componente
     useEffect(() => {
         const fetchProfile = async () => {
-            if (!userInfo) return; // Esperar a que el contexto cargue
+            if (!userInfo) return; 
             setLoading(true);
             try {
-                // Llama a la nueva API de perfil
                 const response = await api.get('/auth/profile/');
                 setFormData(response.data);
             } catch (err) {
@@ -105,7 +100,6 @@ const ProfilePage = () => {
         });
     };
 
-    // 2. Guardar cambios (PUT)
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -113,9 +107,8 @@ const ProfilePage = () => {
         setSuccess('');
 
         try {
-            // Llama a la API de perfil con PUT
             const response = await api.put('/auth/profile/', formData);
-            setFormData(response.data); // Actualizar con los datos guardados
+            setFormData(response.data); 
             setSuccess('¡Perfil actualizado con éxito!');
         } catch (err) {
             setError('Error al guardar los cambios.');

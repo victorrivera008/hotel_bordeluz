@@ -1,15 +1,13 @@
-// frontend/hotel-bordeluz-ui/src/App.jsx (CÓDIGO COMPLETO Y FINAL)
-
 import React, { useState, useEffect } from 'react';
-import Header from './components/layout/Header';
-import Footer from './components/layout/Footer';
-import Home from './components/Home'; 
-import AuthModalContent from './components/AuthModalContent';
-import DashboardEjecutivo from './components/DashboardEjecutivo'; 
-import RoomsPage from './components/RoomsPage'; 
-import ServicesPage from './components/ServicesPage'; 
-import BookingPage from './components/BookingPage'; 
-import ProfilePage from './components/ProfilePage'; 
+import Header from './layout/Header'; 
+import Footer from './layout/Footer';
+import Home from './pages/Home'; 
+import AuthModalContent from './features/Auth/AuthModalContent';
+import DashboardEjecutivo from './features/Dashboard/DashboardEjecutivo'; 
+import RoomsPage from './pages/RoomsPage'; 
+import ServicesPage from './pages/ServicesPage'; 
+import BookingPage from './features/Booking/BookingPage'; 
+import ProfilePage from './features/Auth/ProfilePage'; 
 import { AuthProvider, useAuth } from './context/AuthContext';
 
 
@@ -39,7 +37,7 @@ const AppContent = () => {
     
     const { isAuthenticated, userInfo, loading } = useAuth(); 
     
-    const isStaff = isAuthenticated && userInfo?.rol !== 'Cliente';
+    const isStaff = isAuthenticated && userInfo && userInfo.rol !== 'Cliente';
 
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth < BREAKPOINT);
@@ -102,10 +100,7 @@ const AppContent = () => {
     return (
         <div style={{ 
             fontFamily: 'Arial, sans-serif', 
-            backgroundColor: '#F4E8D8', 
             minHeight: '100vh',
-            width: '100vw', 
-            overflowX: 'hidden',
             boxSizing: 'border-box'
         }}>
             

@@ -1,7 +1,5 @@
-// frontend/hotel-bordeluz-ui/src/components/Register.jsx
 import React, { useState } from 'react';
-import api from '../services/api';
-
+import api from '../../services/api';
 const Register = ({ onSwitchToLogin, onRegistrationSuccess }) => {
     const [formData, setFormData] = useState({
         username: '', email: '', password: '', first_name: '', last_name: '', telefono: ''

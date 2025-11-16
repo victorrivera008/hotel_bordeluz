@@ -1,5 +1,5 @@
 import React from 'react';
-import SearchForm from './SearchForm'; 
+import SearchForm from '../features/Booking/SearchForm';
 
 const style = {
     mainContainer: {
@@ -55,7 +55,9 @@ const Home = () => {
             <div style={style.heroSection}>
                 <div style={style.heroOverlay}>
                     <h1 style={style.heroTitle}>Hotel Boutique & Restaurant</h1>
-                    <p style={{ fontSize: '1.5rem', marginTop: '10px', color: '#4A2A1A' }}>entre Villarrica y Pucón</p>
+                    <p style={{ fontSize: '1.5rem', marginTop: '10px', color: '#4A2A1A' }}>
+                        entre Villarrica y Pucón
+                    </p>
                 </div>
             </div>
 

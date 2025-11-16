@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import api, { setAuthToken } from '../services/api';
-import { useAuth } from '../context/AuthContext'; 
+import api, { setAuthToken } from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
 
 const Login = ({ onSuccess, onSwitchToRegister }) => {
   const { login } = useAuth(); 

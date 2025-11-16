@@ -104,7 +104,7 @@ const style = {
         fontWeight: 'bold',
     },
 };
-// ---
+
 
 const RoomsPage = () => {
     const [roomTypes, setRoomTypes] = useState([]); 
