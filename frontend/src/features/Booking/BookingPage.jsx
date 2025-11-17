@@ -1,9 +1,12 @@
+// frontend/hotel-bordeluz-ui/src/features/Booking/BookingPage.jsx (CÓDIGO COMPLETO Y CORREGIDO)
+
 import React, { useState } from 'react';
 import api from '../../services/api';
-import RoomList from './RoomList'; 
-import SearchForm from './SearchForm'; 
+import RoomList from './RoomList'; // Importa el RoomList (tu código)
+import SearchForm from './SearchForm'; // Importa el SearchForm (corregido)
 import { useAuth } from '../../context/AuthContext'; 
 
+// --- Estilos ---
 const style = {
     container: {
         maxWidth: '1200px',
@@ -37,6 +40,7 @@ const BookingPage = ({ triggerLogin }) => {
     const [error, setError] = useState(null);
     const [searchParams, setSearchParams] = useState(null); 
 
+    // ⚠️ FIX: Esta es la función "inteligente" que llama a la API
     const handleSearch = async (checkIn, checkOut) => {
         setLoading(true);
         setError(null);
@@ -44,6 +48,7 @@ const BookingPage = ({ triggerLogin }) => {
         setSearchParams({ checkIn, checkOut }); 
 
         try {
+            // El Backend está funcionando y enviando datos
             const response = await api.get('/reservas/disponibilidad/', {
                 params: {
                     check_in: checkIn,
@@ -72,11 +77,15 @@ const BookingPage = ({ triggerLogin }) => {
                 </p>
             </div>
 
+            {/* 1. El formulario "tonto" recibe la función 'handleSearch' */}
             <SearchForm onSearch={handleSearch} isLoading={loading} />
 
+            {/* 2. Mensajes de estado */}
             {loading && <p style={{textAlign: 'center', fontSize: '1.2rem'}}>Buscando...</p>}
             {error && <p style={{textAlign: 'center', color: 'red', fontSize: '1.2rem'}}>{error}</p>}
 
+            {/* 3. Renderiza RoomList (tu código) con los resultados */}
+            {/* ⚠️ FIX: No se renderiza RoomList si no hay resultados */}
             {availableRooms.length > 0 && searchParams && (
                 <RoomList 
                     rooms={availableRooms} 

@@ -28,7 +28,6 @@ const style = {
         position: 'relative',
         backgroundImage: 'url(https://www.hotelbordeluz.cl/en/wp-content/uploads/2020/11/slide-h.jpg)', 
         backgroundSize: 'cover',
-        backgroundPosition: 'center',
         marginBottom: '0px', 
     },
     heroOverlay: {
@@ -54,10 +53,7 @@ const Home = () => {
             
             <div style={style.heroSection}>
                 <div style={style.heroOverlay}>
-                    <h1 style={style.heroTitle}>Hotel Boutique & Restaurant</h1>
-                    <p style={{ fontSize: '1.5rem', marginTop: '10px', color: '#4A2A1A' }}>
-                        entre Villarrica y Pucón
-                    </p>
+
                 </div>
             </div>
 

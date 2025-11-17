@@ -1,8 +1,11 @@
+// frontend/hotel-bordeluz-ui/src/features/Booking/ConfirmationModal.jsx (NUEVO ARCHIVO)
+
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import { FaSpa, FaUtensils, FaCocktail } from 'react-icons/fa';
 
+// Estilos del Modal
 const modalStyle = {
     overlay: {
         position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
@@ -25,6 +28,7 @@ const modalStyle = {
     confirmButton: { padding: '12px 25px', backgroundColor: '#4A2A1A', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold', width: '100%', fontSize: '1.1rem', marginTop: '20px' }
 };
 
+// Formateador de precios
 const formatCLP = (amount) => {
     if (isNaN(parseFloat(amount))) return '$ 0';
     return new Intl.NumberFormat('es-CL', { 
@@ -34,14 +38,18 @@ const formatCLP = (amount) => {
 
 
 const ConfirmationModal = ({ room, checkIn, checkOut, diffDays, onClose, triggerLogin }) => {
-    const { isAuthenticated, userInfo } = useAuth();
-    const [allServices, setAllServices] = useState([]);
+    // ⚠️ AHORA este componente revisa la autenticación
+    const { isAuthenticated, userInfo } = useAuth(); 
+    
+    const [allServices, setAllServices] = useState([]); 
     const [selectedServices, setSelectedServices] = useState([]); 
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [reservationStatus, setReservationStatus] = useState(null); 
 
     const roomPrice = parseFloat(room.tipo_detalle.precio_base) * diffDays;
 
+    // 1. Cargar servicios adicionales desde el Backend
     useEffect(() => {
         const fetchServices = async () => {
             try {
@@ -56,6 +64,7 @@ const ConfirmationModal = ({ room, checkIn, checkOut, diffDays, onClose, trigger
         fetchServices();
     }, []);
 
+    // 2. Manejar la selección de servicios
     const handleServiceToggle = (service) => {
         setSelectedServices(prev => {
             const isSelected = prev.find(s => s.id === service.id);
@@ -67,19 +76,23 @@ const ConfirmationModal = ({ room, checkIn, checkOut, diffDays, onClose, trigger
         });
     };
 
+    // 3. Calcular precio total
     const servicesPrice = selectedServices.reduce((total, s) => total + parseFloat(s.precio), 0);
     const totalPrice = roomPrice + servicesPrice;
 
+    // 4. ⚠️ Lógica de POST (Verifica el Login aquí)
     const handleFinalReservation = async () => {
         setLoading(true);
         setError('');
 
+        // ⚠️ FIX: Comprobación de autenticación movida aquí
         if (!isAuthenticated) {
-            triggerLogin();
+            triggerLogin(); // Llama al modal de Login/Registro
             setLoading(false);
             return;
         }
 
+        // Preparar el payload de servicios para el Backend
         const servicesPayload = selectedServices.map(s => ({
             servicio_id: s.id,
             cantidad: 1 
@@ -87,12 +100,13 @@ const ConfirmationModal = ({ room, checkIn, checkOut, diffDays, onClose, trigger
 
         try {
             const response = await api.post('/reservas/', {
-                habitacion: room.id, 
+                habitacion: room.id,
                 fecha_checkin: checkIn,
                 fecha_checkout: checkOut,
                 servicios: servicesPayload, 
             });
 
+            // ÉXITO
             setReservationStatus({
                 success: `¡Reserva #${response.data.reserva.codigo_reserva} CONFIRMADA! Total: ${formatCLP(response.data.reserva.total_pagado)}. Revisa tu email.`
             });
@@ -106,6 +120,7 @@ const ConfirmationModal = ({ room, checkIn, checkOut, diffDays, onClose, trigger
         }
     };
     
+    // Si la reserva fue exitosa, solo muestra el mensaje de éxito
     if (reservationStatus?.success) {
         return (
             <div style={modalStyle.overlay}>
@@ -124,11 +139,13 @@ const ConfirmationModal = ({ room, checkIn, checkOut, diffDays, onClose, trigger
                 <button onClick={onClose} style={modalStyle.closeButton}>&times;</button>
                 <h2 style={style.header}>Confirmar Reserva</h2>
 
+                {/* Resumen de la Habitación */}
                 <div>
                     <strong>Habitación:</strong> {room.tipo_detalle.nombre} (Noches: {diffDays})<br/>
                     <strong>Precio Habitación:</strong> {formatCLP(roomPrice)}
                 </div>
 
+                {/* Selección de Servicios Adicionales */}
                 <h3 style={style.sectionTitle}>Añadir Servicios Adicionales</h3>
                 {loading && <p>Cargando servicios...</p>}
                 <div>
@@ -146,12 +163,14 @@ const ConfirmationModal = ({ room, checkIn, checkOut, diffDays, onClose, trigger
                     ))}
                 </div>
 
+                {/* Total Final */}
                 <div style={style.priceTotal}>
                     Total Estimado: {formatCLP(totalPrice)}
                 </div>
 
                 {error && <p style={{color: 'red'}}>⚠️ {error}</p>}
 
+                {/* Botón de Confirmación Final */}
                 <button 
                     onClick={handleFinalReservation} 
                     disabled={loading}

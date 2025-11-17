@@ -1,5 +1,9 @@
-import React, { useState } from 'react';
+// frontend/hotel-bordeluz-ui/src/features/Booking/SearchForm.jsx (CÓDIGO COMPLETO Y CORREGIDO)
 
+import React, { useState } from 'react';
+// ⚠️ Quitamos 'api' de aquí
+
+// --- Estilos ---
 const style = {
   form: {
     display: 'flex',
@@ -34,6 +38,7 @@ const style = {
   },
 };
 
+// ⚠️ CAMBIO: Recibe 'onSearch' y 'isLoading'
 const SearchForm = ({ onSearch, isLoading }) => {
   const [checkIn, setCheckIn] = useState('');
   const [checkOut, setCheckOut] = useState('');
@@ -51,6 +56,7 @@ const SearchForm = ({ onSearch, isLoading }) => {
     const checkInFormatted = new Date(checkIn).toISOString().split('T')[0];
     const checkOutFormatted = new Date(checkOut).toISOString().split('T')[0];
 
+    // ⚠️ FIX: Llama a la función del padre (BookingPage) con las fechas
     onSearch(checkInFormatted, checkOutFormatted); 
   };
 

@@ -1,5 +1,8 @@
+// frontend/hotel-bordeluz-ui/src/layout/Header.jsx (CÓDIGO COMPLETO Y LIMPIO)
+
 import React, { useState, useEffect, useRef } from 'react';
 import { FaInstagram, FaFacebookF, FaEnvelope, FaUserCircle, FaSignOutAlt, FaBars, FaTimes } from 'react-icons/fa';
+// ⚠️ RUTA CORREGIDA a la nueva carpeta
 import { useAuth } from '../context/AuthContext';
 
 
@@ -90,6 +93,7 @@ const style = {
         cursor: 'pointer',
     },
 
+    // --- ⚠️ ESTILOS DEL MENÚ DESPLEGABLE (Añadidos a tu código) ---
     userMenuContainer: {
         position: 'relative', 
         display: 'flex',
@@ -134,9 +138,11 @@ const Header = ({ onLoginClick, onNavigate, isStaff, isMobile }) => {
     const [hoveredLink, setHoveredLink] = useState(null);
     const [hoveredAction, setHoveredAction] = useState(null); 
     
+    // ⚠️ NUEVO ESTADO Y REF: Control del dropdown de usuario
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef(null); 
 
+    // Lógica para cerrar el dropdown si se hace clic fuera
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -158,7 +164,7 @@ const Header = ({ onLoginClick, onNavigate, isStaff, isMobile }) => {
     const handleNavigation = (page) => {
         onNavigate(page);
         if (isMobile) setIsMenuOpen(false);
-        if (isDropdownOpen) setIsDropdownOpen(false); 
+        if (isDropdownOpen) setIsDropdownOpen(false); // Cierra el dropdown al navegar
     };
 
     const renderNavLink = (name, page) => (
@@ -177,26 +183,30 @@ const Header = ({ onLoginClick, onNavigate, isStaff, isMobile }) => {
         </li>
     );
 
+    // ⚠️ HEADER PARA STAFF (CON DROPDOWN Y TOPBAR)
     if (isStaff) {
         return (
             <header style={{ position: 'relative' }}>
+                {/* Barra superior negra (Restaurada) */}
                 <div style={style.topBar}>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <a href="https://www.instagram.com/hotelboutiquebordeluz" target="_blank" rel="noopener noreferrer" style={{ color: '#D4AF37', marginRight: '10px' }}><FaInstagram /></a>
-                        <a href="https://www.facebook.com/hotelbordeluz" target="_blank" rel="noopener noreferrer" style={{ color: '#D4AF37', marginRight: '20px' }}><FaFacebookF /></a>
-                        <span>Síguenos en Instagram y Facebook</span>
-                    </div>
-                    <div>
-                        <FaEnvelope style={{ marginRight: '5px' }} />
-                        contacto@hotelbordeluz.cl
-                    </div>
+                        <a href="https://www.instagram.com/hotelboutiquebordeluz" target="_blank" rel="noopener noreferrer" style={{ color: '#D4AF37', marginRight: '10px' }}><FaInstagram /></a>
+                        <a href="https://www.facebook.com/hotelbordeluz" target="_blank" rel="noopener noreferrer" style={{ color: '#D4AF37', marginRight: '20px' }}><FaFacebookF /></a>
+                        <span>Síguenos en Instagram y Facebook</span>
+                    </div>
+                    <div>
+                        <FaEnvelope style={{ marginRight: '5px' }} />
+                        contacto@hotelbordeluz.cl
+                    </div>
                 </div>
-                <nav style={{ ...style.mainNav, justifyContent: 'space-between' }}>
-                    <a onClick={() => onNavigate('Home')} style={style.logo}>HBB | Dashboard</a>
-                    
+                <nav style={{ ...style.mainNav, justifyContent: 'space-between' }}>
+                    <a onClick={() => onNavigate('Home')} style={style.logo}>HBB | Dashboard</a>
+                    
+                    {/* Menú desplegable para Staff */}
                     <div style={style.userMenuContainer} ref={dropdownRef}>
                         <div style={style.userMenuTrigger} onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
                             <FaUserCircle style={{ marginRight: '8px' }} />
+                            {/* ⚠️ FIX: Comprobación segura de userInfo.rol */}
                             <span>{userInfo?.rol ? userInfo.rol.replace('Recepcionista', 'Recepción') : 'Staff'}</span>
                         </div>
 
@@ -211,14 +221,16 @@ const Header = ({ onLoginClick, onNavigate, isStaff, isMobile }) => {
                             </div>
                         )}
                     </div>
-                </nav>
+                </nav>
             </header>
         );
     }
 
+    // ⚠️ HEADER PARA PÚBLICO Y CLIENTES (CON DROPDOWN)
     return (
         <header style={{ position: 'relative' }}>
             <div style={style.topBar}>
+                {/* ... (Tu barra superior se mantiene igual) ... */}
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                     <a href="https://www.instagram.com/hotelboutiquebordeluz" target="_blank" rel="noopener noreferrer" style={{ color: '#D4AF37', marginRight: '10px' }}><FaInstagram /></a>
                     <a href="https://www.facebook.com/hotelbordeluz" target="_blank" rel="noopener noreferrer" style={{ color: '#D4AF37', marginRight: '20px' }}><FaFacebookF /></a>
@@ -245,6 +257,7 @@ const Header = ({ onLoginClick, onNavigate, isStaff, isMobile }) => {
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                     {!isMobile && (
                         !isAuthenticated ? (
+                            // --- PÚBLICO (Desktop) ---
                             <>
                                 <button 
                                     onClick={onLoginClick} 
@@ -264,8 +277,10 @@ const Header = ({ onLoginClick, onNavigate, isStaff, isMobile }) => {
                                 </button>
                             </>
                         ) : (
+                            // --- CLIENTE LOGUEADO (Desktop) - CORREGIDO ---
                             <div style={{ display: 'flex', alignItems: 'center' }}>
                                 
+                                {/ * 1. Menú Desplegable "Mi Cuenta" * /}
                                 <div style={style.userMenuContainer} ref={dropdownRef}>
                                     <div style={style.userMenuTrigger} onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
                                         <FaUserCircle style={{ marginRight: '8px' }} />
@@ -284,6 +299,7 @@ const Header = ({ onLoginClick, onNavigate, isStaff, isMobile }) => {
                                     )}
                                 </div>
                                 
+                                {/ * 2. Botón "RESERVAR" (Mantenido al lado) * /}
                                 <button 
                                     onClick={() => handleNavigation('Reservar')} 
                                     style={{ ...style.buttonBase, ...style.reserveButton }}
@@ -297,6 +313,7 @@ const Header = ({ onLoginClick, onNavigate, isStaff, isMobile }) => {
                     )}
                     
                     {isMobile && (
+                        // --- ICONO HAMBURGUESA (Mobile) ---
                         <div onClick={() => setIsMenuOpen(!isMenuOpen)} style={style.mobileIcon}>
                             {isMenuOpen ? <FaTimes /> : <FaBars />}
                         </div>
@@ -304,14 +321,17 @@ const Header = ({ onLoginClick, onNavigate, isStaff, isMobile }) => {
                 </div>
             </nav>
 
+            {/* --- MENÚ DESPLEGABLE (Mobile) --- */}
             {isMobile && isMenuOpen && (
                 <ul style={style.mobileMenu}>
+                    {/* Si es Staff, solo ve Perfil y Salir */}
                     {isStaff ? (
                         <>
                             <li style={style.mobileLinkItem}><a onClick={() => handleNavigation('Profile')} style={style.linkBase}>VER PERFIL</a></li>
                             <li style={style.mobileLinkItem}><button onClick={handleLogout} style={{ ...style.buttonBase, ...style.logoutButton, width: '100%' }}>CERRAR SESIÓN</button></li>
                         </>
                     ) : (
+                        // Si es Público o Cliente
                         <>
                             <li style={style.mobileLinkItem}><a onClick={() => handleNavigation('Home')} style={style.linkBase}>HOME</a></li>
                             <li style={style.mobileLinkItem}><a onClick={() => handleNavigation('Habitaciones')} style={style.linkBase}>HABITACIONES</a></li>
@@ -319,11 +339,13 @@ const Header = ({ onLoginClick, onNavigate, isStaff, isMobile }) => {
                             <li style={style.mobileLinkItem}><a onClick={() => handleNavigation('Contacto')} style={style.linkBase}>CONTACTO</a></li>
                         
                             {!isAuthenticated ? (
+                                // Público (Mobile)
                                 <li style={style.mobileLinkItem}>
                                     <button onClick={onLoginClick} style={{ ...style.buttonBase, ...style.loginButton, width: '100%', marginBottom: '10px' }}>LOGIN / REGISTRO</button>
                                     <button onClick={() => handleNavigation('Reservar')} style={{ ...style.buttonBase, ...style.reserveButton, width: '100%' }}>RESERVAR ONLINE</button>
                                 </li>
                             ) : (
+                                // Cliente (Mobile)
                                 <li style={style.mobileLinkItem}>
                                     <button onClick={() => handleNavigation('Profile')} style={{ ...style.buttonBase, ...style.loginButton, width: '100%', marginBottom: '10px' }}>VER PERFIL</button>
                                     <button onClick={() => handleNavigation('Reservar')} style={{ ...style.buttonBase, ...style.reserveButton, width: '100%', marginBottom: '10px' }}>RESERVAR ONLINE</button>

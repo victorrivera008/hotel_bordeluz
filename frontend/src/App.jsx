@@ -1,3 +1,5 @@
+// frontend/hotel-bordeluz-ui/src/App.jsx (CÓDIGO COMPLETO Y FINAL)
+
 import React, { useState, useEffect } from 'react';
 import Header from './layout/Header'; 
 import Footer from './layout/Footer';
@@ -8,6 +10,7 @@ import RoomsPage from './pages/RoomsPage';
 import ServicesPage from './pages/ServicesPage'; 
 import BookingPage from './features/Booking/BookingPage'; 
 import ProfilePage from './features/Auth/ProfilePage'; 
+import ContactoPage from './pages/ContactoPage'; // ⚠️ IMPORTAR NUEVA PÁGINA
 import { AuthProvider, useAuth } from './context/AuthContext';
 
 
@@ -81,13 +84,11 @@ const AppContent = () => {
                 return <RoomsPage />; 
             case 'Servicios':
                 return <ServicesPage />; 
+            
+            // ⚠️ CORRECCIÓN: Reemplazamos el div por el componente funcional
             case 'Contacto':
-                 return (
-                    <div style={{padding: '80px', textAlign: 'center', minHeight: '60vh', backgroundColor: '#F4E8D8'}}>
-                        <h2 style={{color: '#4A2A1A'}}>Formulario y Ubicación</h2>
-                        <p>Información de contacto, formulario de contacto y mapa.</p>
-                    </div>
-                 );
+                return <ContactoPage />;
+
             case 'Profile':
                 return isAuthenticated ? <ProfilePage /> : <Home triggerLogin={() => setShowLogin(true)} />;
             
