@@ -1,9 +1,5 @@
-// frontend/hotel-bordeluz-ui/src/features/Booking/SearchForm.jsx (CÓDIGO COMPLETO Y CORREGIDO)
-
 import React, { useState } from 'react';
-// ⚠️ Quitamos 'api' de aquí
 
-// --- Estilos ---
 const style = {
   form: {
     display: 'flex',
@@ -28,7 +24,7 @@ const style = {
   },
   button: {
     padding: '12px 25px',
-    backgroundColor: '#D4AF37', 
+    backgroundColor: '#D4AF37',
     color: 'white',
     border: 'none',
     borderRadius: '5px',
@@ -38,7 +34,6 @@ const style = {
   },
 };
 
-// ⚠️ CAMBIO: Recibe 'onSearch' y 'isLoading'
 const SearchForm = ({ onSearch, isLoading }) => {
   const [checkIn, setCheckIn] = useState('');
   const [checkOut, setCheckOut] = useState('');
@@ -52,27 +47,23 @@ const SearchForm = ({ onSearch, isLoading }) => {
       setError('Por favor, selecciona ambas fechas.');
       return;
     }
-    
-    const checkInFormatted = new Date(checkIn).toISOString().split('T')[0];
-    const checkOutFormatted = new Date(checkOut).toISOString().split('T')[0];
 
-    // ⚠️ FIX: Llama a la función del padre (BookingPage) con las fechas
-    onSearch(checkInFormatted, checkOutFormatted); 
+    onSearch(checkIn, checkOut);
   };
 
   return (
     <div>
         <form onSubmit={handleSearch} style={style.form}>
             <div style={style.inputGroup}>
-            <label>Check-in</label>
-            <input type="date" value={checkIn} onChange={(e) => setCheckIn(e.target.value)} required style={style.input} />
+                <label>Check-in</label>
+                <input type="date" value={checkIn} onChange={(e) => setCheckIn(e.target.value)} required style={style.input} />
             </div>
             <div style={style.inputGroup}>
-            <label>Check-out</label>
-            <input type="date" value={checkOut} onChange={(e) => setCheckOut(e.target.value)} required style={style.input} />
+                <label>Check-out</label>
+                <input type="date" value={checkOut} onChange={(e) => setCheckOut(e.target.value)} required style={style.input} />
             </div>
             <button type="submit" disabled={isLoading} style={style.button}>
-            {isLoading ? 'Buscando...' : 'Buscar Disponibilidad'}
+                {isLoading ? 'Buscando...' : 'Buscar Disponibilidad'}
             </button>
         </form>
         {error && <p style={{ color: '#A52A2A', fontWeight: 'bold' }}>{error}</p>}

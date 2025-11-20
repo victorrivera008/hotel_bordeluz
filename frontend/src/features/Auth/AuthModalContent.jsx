@@ -9,12 +9,16 @@ const AuthModalContent = ({ onSuccess }) => {
         setIsLoginView(!isLoginView);
     };
 
+    const handleLoginSuccess = (user) => {
+        if (onSuccess) onSuccess(user);
+    };
+
     return (
         <>
             {isLoginView ? (
                 <Login 
-                    onSuccess={onSuccess} 
-                    onSwitchToRegister={handleSwitch}
+                    onSuccess={handleLoginSuccess} 
+                    onSwitchToRegister={handleSwitch} 
                 />
             ) : (
                 <Register 

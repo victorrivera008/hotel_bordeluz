@@ -1,6 +1,8 @@
+// frontend/hotel-bordeluz-ui/src/features/Auth/Login.jsx (CÓDIGO MODIFICADO)
+
 import React, { useState } from 'react';
-import api, { setAuthToken } from '../../services/api';
-import { useAuth } from '../../context/AuthContext';
+import api from '../../services/api'; // Ruta corregida
+import { useAuth } from '../../context/AuthContext'; 
 
 const Login = ({ onSuccess, onSwitchToRegister }) => {
   const { login } = useAuth(); 
@@ -28,11 +30,14 @@ const Login = ({ onSuccess, onSwitchToRegister }) => {
         username: username,
       };
 
+      // Actualiza el contexto global
       login(userInfo, accessToken); 
       
       setLoading(false);
       
-      if (onSuccess) onSuccess(); 
+      // ⚠️ CAMBIO CLAVE: Pasamos 'userInfo' al callback onSuccess
+      // Esto permite que App.jsx sepa quién acaba de entrar
+      if (onSuccess) onSuccess(userInfo); 
       
     } catch (err) {
       setLoading(false);

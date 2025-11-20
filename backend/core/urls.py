@@ -1,27 +1,29 @@
+# backend/core/urls.py (CORREGIDO)
+
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenRefreshView 
 
 from core.views import HealthCheckAPI 
-from reservas.views import ReservaViewSet, TipoHabitacionReadOnlyViewSet, ServicioReadOnlyViewSet
+# ⚠️ IMPORTACIONES ACTUALIZADAS: Usamos los nombres nuevos (ViewSet)
+from reservas.views import ReservaViewSet, TipoHabitacionViewSet, ServicioViewSet, HabitacionViewSet
 from reportes.views import DashboardEjecutivoAPI
 from usuarios.views import CustomTokenObtainPairView 
 
+# --- Configuración del Router ---
 router = DefaultRouter()
 router.register(r'reservas', ReservaViewSet, basename='reserva') 
-router.register(r'tipos-habitacion', TipoHabitacionReadOnlyViewSet, basename='tipos_habitacion') 
-router.register(r'servicios', ServicioReadOnlyViewSet, basename='servicios') 
+router.register(r'tipos-habitacion', TipoHabitacionViewSet, basename='tipos_habitacion')
+router.register(r'servicios', ServicioViewSet, basename='servicios')
+router.register(r'habitaciones', HabitacionViewSet, basename='habitaciones') # Nueva ruta de inventario
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    
     path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/auth/', include('usuarios.urls')), 
-    
     path('status/', HealthCheckAPI.as_view(), name='health_check'), 
-    
     path('api/', include(router.urls)), 
     path('api/reportes/dashboard/', DashboardEjecutivoAPI.as_view(), name='dashboard_ejecutivo'),
 ]
