@@ -28,7 +28,7 @@ class DashboardEjecutivoAPI(APIView):
         
         
         reservas_en_rango = Reserva.objects.filter(
-            fecha_reserva__range=[inicio_periodo, fin_periodo]
+            fecha_checkin__range=[inicio_periodo, fin_periodo]
         )
         
         datos_mysql = reservas_en_rango.aggregate(

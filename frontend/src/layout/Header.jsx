@@ -1,322 +1,513 @@
+// frontend/src/layout/Header.jsx
+
 import React, { useState, useEffect, useRef } from 'react';
-import { FaInstagram, FaFacebookF, FaEnvelope, FaUserCircle, FaSignOutAlt, FaBars, FaTimes, FaList } from 'react-icons/fa';
+import {
+  FaInstagram,
+  FaFacebookF,
+  FaEnvelope,
+  FaUserCircle,
+  FaSignOutAlt,
+  FaBars,
+  FaTimes,
+  FaRegCalendarCheck,
+} from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
 
 const style = {
-    topBar: {
-        backgroundColor: '#1E1E1E',
-        color: '#D4AF37',
-        padding: '8px 40px',
-        fontSize: '0.85rem',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        fontWeight: '500',
-    },
-    socialIcons: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '15px',
-    },
-    iconLink: {
-        color: '#D4AF37',
-        textDecoration: 'none',
-        display: 'flex',
-        alignItems: 'center',
-        transition: 'opacity 0.3s',
-    },
-    contactInfo: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-    },
-
-    mainNav: {
-        backgroundColor: 'white',
-        borderBottom: '1px solid #EAEAEA',
-        padding: '15px 40px',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        boxShadow: '0 2px 10px rgba(0,0,0,0.03)',
-        position: 'relative', 
-    },
-    logo: {
-        color: '#4A2A1A', 
-        fontFamily: 'Georgia, serif',
-        fontSize: '1.8rem',
-        fontWeight: 'bold',
-        textDecoration: 'none',
-        cursor: 'pointer',
-        letterSpacing: '1px',
-    },
-    navLinksDesktop: {
-        display: 'flex',
-        listStyle: 'none',
-        padding: 0,
-        margin: 0,
-        gap: '25px',
-    },
-    link: {
-        color: '#555',
-        textDecoration: 'none',
-        fontSize: '0.95rem',
-        fontWeight: '600',
-        textTransform: 'uppercase',
-        letterSpacing: '0.5px',
-        padding: '5px 0',
-        borderBottom: '2px solid transparent',
-        transition: 'all 0.3s',
-        cursor: 'pointer',
-    },
-    linkHover: {
-        color: '#D4AF37',
-        borderBottom: '2px solid #D4AF37',
-    },
-
-    actionsContainer: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '15px',
-    },
-    btnLogin: {
-        backgroundColor: '#4A2A1A',
-        color: 'white',
-        border: 'none',
-        padding: '10px 20px',
-        borderRadius: '4px',
-        fontWeight: 'bold',
-        fontSize: '0.9rem',
-        cursor: 'pointer',
-        textTransform: 'uppercase',
-        transition: 'background 0.3s',
-    },
-    btnReserve: {
-        backgroundColor: '#D4AF37', 
-        color: 'white',
-        border: 'none',
-        padding: '10px 20px',
-        borderRadius: '4px',
-        fontWeight: 'bold',
-        fontSize: '0.9rem',
-        cursor: 'pointer',
-        textTransform: 'uppercase',
-        boxShadow: '0 4px 6px rgba(212, 175, 55, 0.3)',
-        transition: 'transform 0.2s, box-shadow 0.3s',
-    },
-
-    userMenuContainer: {
-        position: 'relative',
-    },
-    userTrigger: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-        cursor: 'pointer',
-        padding: '8px 12px',
-        borderRadius: '4px',
-        transition: 'background 0.2s',
-        color: '#4A2A1A',
-        fontWeight: '600',
-    },
-    dropdown: {
-        position: 'absolute',
-        top: '120%',
-        right: 0,
-        backgroundColor: 'white',
-        border: '1px solid #EEE',
-        borderRadius: '8px',
-        boxShadow: '0 5px 15px rgba(0,0,0,0.1)',
-        minWidth: '200px',
-        zIndex: 1000,
-        padding: '5px 0',
-    },
-    dropdownItem: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '10px',
-        padding: '12px 20px',
-        color: '#555',
-        textDecoration: 'none',
-        fontSize: '0.9rem',
-        cursor: 'pointer',
-        transition: 'background 0.2s',
-    },
-
-    mobileToggle: {
-        fontSize: '1.5rem',
-        color: '#4A2A1A',
-        cursor: 'pointer',
-        display: 'none', 
-    },
-    mobileMenu: {
-        position: 'absolute',
-        top: '100%',
-        left: 0,
-        width: '100%',
-        backgroundColor: 'white',
-        boxShadow: '0 10px 20px rgba(0,0,0,0.1)',
-        zIndex: 999,
-        display: 'flex',
-        flexDirection: 'column',
-        padding: '20px',
-    }
+  topBar: {
+    backgroundColor: '#1E1E1E',
+    color: '#D4AF37',
+    padding: '5px 20px',
+    fontSize: '0.85rem',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  mainNav: {
+    backgroundColor: 'white',
+    borderBottom: '1px solid #EAEAEA',
+    padding: '10px 20px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  logo: {
+    color: '#4A2A1A',
+    fontFamily: 'Georgia, serif',
+    fontSize: '1.8rem',
+    fontWeight: 'bold',
+    textDecoration: 'none',
+    cursor: 'pointer',
+  },
+  navLinksDesktop: {
+    display: 'flex',
+    listStyle: 'none',
+    padding: 0,
+    margin: 0,
+  },
+  linkBase: {
+    color: '#4A2A1A',
+    textDecoration: 'none',
+    padding: '10px 15px',
+    fontSize: '1rem',
+    fontWeight: '500',
+    transition: 'background-color 0.3s',
+    cursor: 'pointer',
+  },
+  buttonBase: {
+    padding: '10px 20px',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    fontSize: '0.9rem',
+    fontWeight: 'bold',
+    marginLeft: '20px',
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
+    transition: 'opacity 0.3s',
+  },
+  loginButton: {
+    backgroundColor: '#4A2A1A',
+    color: 'white',
+  },
+  reserveButton: {
+    backgroundColor: '#D4AF37',
+    color: 'white',
+  },
+  logoutButton: {
+    backgroundColor: '#A52A2A',
+    color: 'white',
+  },
+  hoverColor: '#F4E8D8',
+  mobileMenu: {
+    position: 'absolute',
+    top: '100%',
+    left: 0,
+    width: '100%',
+    backgroundColor: 'white',
+    boxShadow: '0 5px 10px rgba(0, 0, 0, 0.1)',
+    zIndex: 900,
+    listStyle: 'none',
+    padding: 0,
+  },
+  mobileLinkItem: {
+    borderTop: '1px solid #F0F0F0',
+    padding: '15px 20px',
+    textAlign: 'left',
+  },
+  mobileIcon: {
+    fontSize: '1.5rem',
+    color: '#4A2A1A',
+    cursor: 'pointer',
+  },
+  userMenuContainer: {
+    position: 'relative',
+    display: 'flex',
+    alignItems: 'center',
+  },
+  userMenuTrigger: {
+    display: 'flex',
+    alignItems: 'center',
+    cursor: 'pointer',
+    color: '#4A2A1A',
+    backgroundColor: '#F4E8D8',
+    padding: '8px 12px',
+    borderRadius: '5px',
+  },
+  dropdownMenu: {
+    position: 'absolute',
+    top: '120%',
+    right: 0,
+    backgroundColor: 'white',
+    borderRadius: '8px',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+    zIndex: 1100,
+    width: '200px',
+    overflow: 'hidden',
+  },
+  dropdownItem: {
+    padding: '12px 15px',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
+    color: '#4A2A1A',
+    textDecoration: 'none',
+    fontSize: '0.9rem',
+  },
 };
 
-const Header = ({ onLoginClick, onNavigate, isStaff, isMobile }) => {
-    const { isAuthenticated, logout, userInfo } = useAuth();
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const dropdownRef = useRef(null);
+const Header = ({ onLoginClick, onNavigate, isStaff, isRecepcion, isMobile }) => {
+  const { isAuthenticated, logout, userInfo } = useAuth();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [hoveredLink, setHoveredLink] = useState(null);
+  
+  // Debug: verificar props recibidos
+  if (isStaff) {
+    console.log('🔍 Header - isRecepcion recibido:', isRecepcion, '| userInfo.rol:', userInfo?.rol);
+  }
 
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setIsDropdownOpen(false);
-            }
-        };
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, [dropdownRef]);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
-    const handleLogout = () => {
-        if (window.confirm('¿Cerrar sesión?')) {
-            logout();
-            onNavigate('Home');
-            setIsDropdownOpen(false);
-        }
-    };
-
-    const handleNav = (page) => {
-        onNavigate(page);
-        setIsMenuOpen(false);
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsDropdownOpen(false);
+      }
     };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
-    const NavItem = ({ name, page }) => (
-        <li style={{ listStyle: 'none' }}>
-            <a
-                onClick={() => handleNav(page)}
-                style={style.link}
-                onMouseEnter={(e) => { e.target.style.color = style.linkHover.color; e.target.style.borderBottom = style.linkHover.borderBottom; }}
-                onMouseLeave={(e) => { e.target.style.color = style.link.color; e.target.style.borderBottom = style.link.borderBottom; }}
-            >
-                {name}
-            </a>
-        </li>
-    );
+  const handleLogout = () => {
+    if (window.confirm('¿Estás seguro que deseas cerrar sesión?')) {
+      logout();
+      onNavigate('Home');
+    }
+  };
 
+  const handleNavigation = (page) => {
+    onNavigate(page);
+    if (isMobile) setIsMenuOpen(false);
+    if (isDropdownOpen) setIsDropdownOpen(false);
+  };
+
+  const renderNavLink = (name, page) => (
+    <li key={page}>
+      <a
+        onClick={() => handleNavigation(page)}
+        style={{
+          ...style.linkBase,
+          backgroundColor: hoveredLink === page ? style.hoverColor : 'transparent',
+        }}
+        onMouseEnter={() => setHoveredLink(page)}
+        onMouseLeave={() => setHoveredLink(null)}
+      >
+        {name}
+      </a>
+    </li>
+  );
+
+  // ==========================
+  // HEADER STAFF (ADMIN)
+  // ==========================
+  if (isStaff) {
     return (
-        <header style={{ position: 'relative', fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif" }}>
-            <div style={style.topBar}>
-                <div style={style.socialIcons}>
-                    <a href="https://instagram.com" target="_blank" rel="noreferrer" style={style.iconLink}><FaInstagram /></a>
-                    <a href="https://facebook.com" target="_blank" rel="noreferrer" style={style.iconLink}><FaFacebookF /></a>
-                    <span style={{ opacity: 0.8, marginLeft: '5px' }}>Síguenos en redes</span>
-                </div>
-                <div style={style.contactInfo}>
-                    <FaEnvelope /> contacto@hotelbordeluz.cl
-                </div>
+      <header style={{ position: 'relative' }}>
+        <div style={style.topBar}>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <a
+              href="https://www.instagram.com/hotelboutiquebordeluz"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: '#D4AF37', marginRight: '10px' }}
+            >
+              <FaInstagram />
+            </a>
+            <a
+              href="https://www.facebook.com/hotelbordeluz"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: '#D4AF37', marginRight: '20px' }}
+            >
+              <FaFacebookF />
+            </a>
+            <span>Panel de administración · Hotel Bordeluz</span>
+          </div>
+          <div>
+            <FaEnvelope style={{ marginRight: '5px' }} />
+            contacto@hotelbordeluz.cl
+          </div>
+        </div>
+
+        <nav style={{ ...style.mainNav, justifyContent: 'space-between' }}>
+          {/* Lado izquierdo: logo + navegación admin */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+            <a onClick={() => handleNavigation('Dashboard')} style={style.logo}>
+              HBB | Panel Staff
+            </a>
+
+            {/* Links de administración: Panel ejecutivo / Gestión reservas */}
+            <ul style={style.navLinksDesktop}>
+              {isRecepcion ? (
+                <>
+                  {renderNavLink('PANEL RECEPCIÓN', 'Dashboard')}
+                  {renderNavLink('GESTIÓN DE RESERVAS', 'ReservasAdmin')}
+                </>
+              ) : (
+                <>
+                  {renderNavLink('PANEL EJECUTIVO', 'Dashboard')}
+                  {renderNavLink('GESTIÓN DE RESERVAS', 'ReservasAdmin')}
+                </>
+              )}
+            </ul>
+          </div>
+
+          {/* Menú usuario staff */}
+          <div style={style.userMenuContainer} ref={dropdownRef}>
+            <div
+              style={style.userMenuTrigger}
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            >
+              <FaUserCircle style={{ marginRight: '8px' }} />
+              <span>
+                {userInfo?.rol
+                  ? userInfo.rol.replace('Recepcionista', 'Recepción')
+                  : 'Staff'}
+              </span>
             </div>
 
-            <nav style={style.mainNav}>
-                <a onClick={() => handleNav('Home')} style={style.logo}>
-                    {isStaff ? 'HBB | Dashboard' : 'HBB | Bordeluz'}
+            {isDropdownOpen && (
+              <div style={style.dropdownMenu}>
+                <a
+                  onClick={() => handleNavigation('Profile')}
+                  style={style.dropdownItem}
+                >
+                  <FaUserCircle /> Ver Perfil
                 </a>
-
-                {!isMobile && !isStaff && (
-                    <ul style={style.navLinksDesktop}>
-                        <NavItem name="HOME" page="Home" />
-                        <NavItem name="HABITACIONES" page="Habitaciones" />
-                        <NavItem name="SERVICIOS" page="Servicios" />
-                        <NavItem name="CONTACTO" page="Contacto" />
-                    </ul>
-                )}
-
-                <div style={style.actionsContainer}>
-                    
-                    {!isMobile && (
-                        <>
-                            {!isAuthenticated && (
-                                <>
-                                    <button onClick={onLoginClick} style={style.btnLogin}>Login</button>
-                                    <button onClick={() => handleNav('Reservar')} style={style.btnReserve}>Reservar Online</button>
-                                </>
-                            )}
-                            {isAuthenticated && (
-                                <div style={style.userMenuContainer} ref={dropdownRef}>
-                                    <div 
-                                        style={{...style.userTrigger, backgroundColor: isDropdownOpen ? '#EEE' : 'transparent'}} 
-                                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                                    >
-                                        <FaUserCircle size={20} />
-                                        <span>{isStaff ? 'Administración' : 'Mi Cuenta'}</span>
-                                    </div>
-
-                                    {isDropdownOpen && (
-                                        <div style={style.dropdown}>
-                                            <div style={{padding: '10px 20px', borderBottom: '1px solid #eee', color: '#888', fontSize: '0.8rem'}}>
-                                                Hola, {userInfo?.username || 'Usuario'}
-                                            </div>
-                                            
-                                            <a onClick={() => handleNav('Profile')} style={style.dropdownItem}>
-                                                <FaUserCircle color="#D4AF37"/> Ver Perfil
-                                            </a>
-                                            
-                                            {!isStaff && (
-                                                <a onClick={() => handleNav('MyReservations')} style={style.dropdownItem}>
-                                                    <FaList color="#D4AF37"/> Mis Reservas
-                                                </a>
-                                            )}
-
-                                            <a onClick={handleLogout} style={{...style.dropdownItem, color: '#C53030', borderTop: '1px solid #EEE'}}>
-                                                <FaSignOutAlt /> Cerrar Sesión
-                                            </a>
-                                        </div>
-                                    )}
-                                </div>
-                            )}
-
-                            {isAuthenticated && !isStaff && (
-                                <button onClick={() => handleNav('Reservar')} style={style.btnReserve}>
-                                    Reservar
-                                </button>
-                            )}
-                        </>
-                    )}
-
-                    {isMobile && (
-                        <div onClick={() => setIsMenuOpen(!isMenuOpen)} style={{...style.mobileToggle, display: 'block'}}>
-                            {isMenuOpen ? <FaTimes /> : <FaBars />}
-                        </div>
-                    )}
-                </div>
-            </nav>
-
-            {isMobile && isMenuOpen && (
-                <div style={style.mobileMenu}>
-                    <a onClick={() => handleNav('Home')} style={style.dropdownItem}>HOME</a>
-                    <a onClick={() => handleNav('Habitaciones')} style={style.dropdownItem}>HABITACIONES</a>
-                    <a onClick={() => handleNav('Servicios')} style={style.dropdownItem}>SERVICIOS</a>
-                    <a onClick={() => handleNav('Contacto')} style={style.dropdownItem}>CONTACTO</a>
-                    <hr style={{borderColor: '#EEE', margin: '10px 0'}}/>
-                    
-                    {!isAuthenticated ? (
-                        <>
-                            <button onClick={() => {onLoginClick(); setIsMenuOpen(false)}} style={{...style.btnLogin, width: '100%', marginBottom: '10px'}}>LOGIN</button>
-                            <button onClick={() => handleNav('Reservar')} style={{...style.btnReserve, width: '100%'}}>RESERVAR</button>
-                        </>
-                    ) : (
-                        <>
-                            <a onClick={() => handleNav('Profile')} style={style.dropdownItem}><FaUserCircle/> Mi Perfil</a>
-                            {!isStaff && <a onClick={() => handleNav('MyReservations')} style={style.dropdownItem}><FaList/> Mis Reservas</a>}
-                            <a onClick={handleLogout} style={{...style.dropdownItem, color: 'red'}}><FaSignOutAlt/> Salir</a>
-                        </>
-                    )}
-                </div>
+                <a
+                  onClick={handleLogout}
+                  style={{ ...style.dropdownItem, color: '#A52A2A' }}
+                >
+                  <FaSignOutAlt /> Cerrar Sesión
+                </a>
+              </div>
             )}
-        </header>
+          </div>
+        </nav>
+      </header>
     );
+  }
+
+  // ==========================
+  // HEADER PÚBLICO / CLIENTES
+  // ==========================
+  return (
+    <header style={{ position: 'relative' }}>
+      <div style={style.topBar}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <a
+            href="https://www.instagram.com/hotelboutiquebordeluz"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: '#D4AF37', marginRight: '10px' }}
+          >
+            <FaInstagram />
+          </a>
+          <a
+            href="https://www.facebook.com/hotelbordeluz"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: '#D4AF37', marginRight: '20px' }}
+          >
+            <FaFacebookF />
+          </a>
+          <span>Síguenos en Instagram y Facebook</span>
+        </div>
+        <div>
+          <FaEnvelope style={{ marginRight: '5px' }} />
+          contacto@hotelbordeluz.cl
+        </div>
+      </div>
+
+      <nav style={style.mainNav}>
+        <a onClick={() => handleNavigation('Home')} style={style.logo}>
+          HBB | Hotel Boutique Bordeluz
+        </a>
+
+        {!isMobile && (
+          <ul style={style.navLinksDesktop}>
+            {renderNavLink('HOME', 'Home')}
+            {renderNavLink('HABITACIONES', 'Habitaciones')}
+            {renderNavLink('SERVICIOS', 'Servicios')}
+            {renderNavLink('CONTACTO', 'Contacto')}
+          </ul>
+        )}
+
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          {!isMobile &&
+            (!isAuthenticated ? (
+              <>
+                <button
+                  onClick={onLoginClick}
+                  style={{ ...style.buttonBase, ...style.loginButton }}
+                >
+                  LOGIN / REGISTRO
+                </button>
+                <button
+                  onClick={() => handleNavigation('Reservar')}
+                  style={{ ...style.buttonBase, ...style.reserveButton }}
+                >
+                  RESERVAR ONLINE
+                </button>
+              </>
+            ) : (
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                {/* Dropdown Mi Cuenta */}
+                <div style={style.userMenuContainer} ref={dropdownRef}>
+                  <div
+                    style={style.userMenuTrigger}
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  >
+                    <FaUserCircle style={{ marginRight: '8px' }} />
+                    <span>Mi Cuenta</span>
+                  </div>
+
+                  {isDropdownOpen && (
+                    <div style={style.dropdownMenu}>
+                      <a
+                        onClick={() => handleNavigation('Profile')}
+                        style={style.dropdownItem}
+                      >
+                        <FaUserCircle /> Ver Perfil
+                      </a>
+                      <a
+                        onClick={() => handleNavigation('MisReservas')}
+                        style={style.dropdownItem}
+                      >
+                        <FaRegCalendarCheck /> Mis Reservas
+                      </a>
+                      <a
+                        onClick={handleLogout}
+                        style={{ ...style.dropdownItem, color: '#A52A2A' }}
+                      >
+                        <FaSignOutAlt /> Cerrar Sesión
+                      </a>
+                    </div>
+                  )}
+                </div>
+
+                <button
+                  onClick={() => handleNavigation('Reservar')}
+                  style={{ ...style.buttonBase, ...style.reserveButton }}
+                >
+                  RESERVAR
+                </button>
+              </div>
+            ))}
+
+          {isMobile && (
+            <div
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              style={style.mobileIcon}
+            >
+              {isMenuOpen ? <FaTimes /> : <FaBars />}
+            </div>
+          )}
+        </div>
+      </nav>
+
+      {/* Menú móvil */}
+      {isMobile && isMenuOpen && (
+        <ul style={style.mobileMenu}>
+          <li style={style.mobileLinkItem}>
+            <a
+              onClick={() => handleNavigation('Home')}
+              style={style.linkBase}
+            >
+              HOME
+            </a>
+          </li>
+          <li style={style.mobileLinkItem}>
+            <a
+              onClick={() => handleNavigation('Habitaciones')}
+              style={style.linkBase}
+            >
+              HABITACIONES
+            </a>
+          </li>
+          <li style={style.mobileLinkItem}>
+            <a
+              onClick={() => handleNavigation('Servicios')}
+              style={style.linkBase}
+            >
+              SERVICIOS
+            </a>
+          </li>
+          <li style={style.mobileLinkItem}>
+            <a
+              onClick={() => handleNavigation('Contacto')}
+              style={style.linkBase}
+            >
+              CONTACTO
+            </a>
+          </li>
+
+          {!isAuthenticated ? (
+            <li style={style.mobileLinkItem}>
+              <button
+                onClick={onLoginClick}
+                style={{
+                  ...style.buttonBase,
+                  ...style.loginButton,
+                  width: '100%',
+                  marginBottom: '10px',
+                }}
+              >
+                LOGIN / REGISTRO
+              </button>
+              <button
+                onClick={() => handleNavigation('Reservar')}
+                style={{
+                  ...style.buttonBase,
+                  ...style.reserveButton,
+                  width: '100%',
+                }}
+              >
+                RESERVAR ONLINE
+              </button>
+            </li>
+          ) : (
+            <li style={style.mobileLinkItem}>
+              <button
+                onClick={() => handleNavigation('Profile')}
+                style={{
+                  ...style.buttonBase,
+                  ...style.loginButton,
+                  width: '100%',
+                  marginBottom: '10px',
+                }}
+              >
+                VER PERFIL
+              </button>
+              <button
+                onClick={() => handleNavigation('MisReservas')}
+                style={{
+                  ...style.buttonBase,
+                  ...style.reserveButton,
+                  width: '100%',
+                  marginBottom: '10px',
+                }}
+              >
+                MIS RESERVAS
+              </button>
+              <button
+                onClick={() => handleNavigation('Reservar')}
+                style={{
+                  ...style.buttonBase,
+                  ...style.reserveButton,
+                  width: '100%',
+                  marginBottom: '10px',
+                }}
+              >
+                RESERVAR ONLINE
+              </button>
+              <button
+                onClick={handleLogout}
+                style={{
+                  ...style.buttonBase,
+                  ...style.logoutButton,
+                  width: '100%',
+                }}
+              >
+                CERRAR SESIÓN
+              </button>
+            </li>
+          )}
+        </ul>
+      )}
+    </header>
+  );
 };
 
 export default Header;
